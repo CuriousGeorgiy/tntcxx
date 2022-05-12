@@ -378,6 +378,23 @@ test_basic()
 	tnt::mpp::encode(buf, uint8_t(200), short(2000), 2000000, 4000000000u);
 	tnt::mpp::encode(buf, FOR_BILLIONS, 20000000000ull, -1);
 	tnt::mpp::encode(buf, MUNUS_ONE_HUNDRED, -100, -1000);
+
+	auto run = buf.begin<true>();
+	uint64_t u0 = 999;
+	int i10 = 0;
+	tnt::mpp::decode(run, u0, i10);
+	fail_if(u0 != 0);
+	fail_if(i10 != 10);
+	uint8_t u200 = 0;
+	short i2k = 0;
+	double d2M = 0;
+	uint64_t u4G = 0;
+	tnt::mpp::decode(run, u200, i2k, d2M, u4G);
+	fail_if(u200 != 200);
+	fail_if(i2k != 2000);
+	fail_if(d2M != 2000000);
+	fail_if(u4G != 4000000000u);
+
 	tnt::mpp::encode(buf, "aaa");
 	const char* bbb = "bbb";
 	tnt::mpp::encode(buf, bbb);
