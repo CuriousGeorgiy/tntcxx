@@ -332,6 +332,66 @@ decode(CONT&)
 	return true;
 }
 
+
+template <class T, T I, T... J>
+constexpr T integer_sequence_top(std::integer_sequence<T, I, J...>) {
+	return I;
+}
+
+template <class T, T I, T... J>
+constexpr auto integer_sequence_next(std::integer_sequence<T, I, J...>) {
+	return std::integer_sequence<T, I + 1, J...>{};
+}
+
+template <class T, T... J>
+constexpr auto integer_sequence_push(std::integer_sequence<T, J...>) {
+	return std::integer_sequence<T, 0, J...>{};
+}
+
+template <class T, T I, T... J>
+constexpr auto integer_sequence_pop(std::integer_sequence<T, I, J...>) {
+	return std::integer_sequence<T, J...>{};
+}
+
+static_assert(integer_sequence_top(std::make_index_sequence<3>{}) == 0);
+
+
+struct fail;
+struct skip;
+//struct done;
+
+template <intptr_t ...I, class ...T>
+
+
+template <intptr_t ...I, class ...T>
+auto locate(std::integer_sequence<intptr_t, I...>, T&... t)
+{
+	return (tnt::get<I>(std::tie(t...))...);
+}
+
+
+template <class CONT, class IS, class ...T>
+struct action {
+	using IS_NEXT = decltype(integer_sequence_next(IS{}));
+	using next_action = action<CONT, IS_NEXT, T...>;
+	static bool perform(CONT& cont, T&... t)
+	{
+		auto
+		if constexpr(IS::size() == 1 &&
+			     index_sequence_top(IS{}) == sizeof...(T)) {
+			return true;
+		} else {
+		}
+	}
+
+};
+
+template <class ...T>
+struct action<std::index_sequence T...> {
+
+};
+
+
 template <class CONT, class T, class ...MORE>
 bool
 decode(CONT& cont, T& t, MORE&... more)
